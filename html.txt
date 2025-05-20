@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerConnect - Career Guidance & Internships</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #2563eb;
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        .high-contrast {
+            background-color: #000 !important;
+            color: #fff !important;
+        }
+        
+        .high-contrast .bg-white,
+        .high-contrast .bg-blue-50,
+        .high-contrast .bg-gray-50,
+        .high-contrast .bg-blue-600,
+        .high-contrast .bg-indigo-600 {
+            background-color: #000 !important;
+        }
+        
+        .high-contrast .text-gray-600,
+        .high-contrast .text-gray-700,
+        .high-contrast .text-gray-800,
+        .high-contrast .text-blue-600,
+        .high-contrast .text-blue-700 {
+            color: #fff !important;
+        }
+        
+        .high-contrast .border,
+        .high-contrast .border-gray-200 {
+            border-color: #fff !important;
+        }
+        
+        .high-contrast button,
+        .high-contrast .btn {
+            background-color: #fff !important;
+            color: #000 !important;
+            border: 2px solid #fff !important;
+        }
+        
+        .progress-container {
+            position: relative;
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            height: 100%;
+            background-color: #3b82f6;
+            transition: width 0.5s ease;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .achievement-badge {
+            transition: transform 0.3s ease;
+        }
+        
+        .achievement-badge:hover {
+            transform: scale(1.1);
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .mentor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header with navigation -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <h1 class="ml-2 text-xl font-bold text-blue-700">CareerConnect</h1>
+            </div>
+            
+            <nav class="hidden md:flex space-x-6">
+                <a href="#dashboard" class="text-gray-700 hover:text-blue-600 font-medium">Dashboard</a>
+                <a href="#internships" class="text-gray-700 hover:text-blue-600 font-medium">Internships</a>
+                <a href="#mentorship" class="text-gray-700 hover:text-blue-600 font-medium">Mentorship</a>
+                <a href="#resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+                <a href="#community" class="text-gray-700 hover:text-blue-600 font-medium">Community</a>
+            </nav>
+            
+            <div class="flex items-center space-x-4">
+                <button id="accessibility-toggle" aria-label="Toggle high contrast mode" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
+                
+                <div class="relative">
+                    <button aria-label="Notifications" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+                
+                <div class="relative">
+                    <button id="profile-menu-button" aria-expanded="false" aria-haspopup="true" class="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS11c2VyIj48cGF0aCBkPSJNMjAgMjF2LTJhNCA0IDAgMCAwLTQtNEg4YTQgNCAwIDAgMC00IDR2MiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCIvPjwvc3ZnPg==" alt="User profile" class="h-8 w-8 rounded-full bg-gray-200 p-1">
+                        <span class="text-sm font-medium text-gray-700 hidden md:block">Alex Johnson</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main id="main-content" class="container mx-auto px-4 py-8">
+        <!-- Welcome banner with personalized greeting -->
+        <section class="bg-blue-50 rounded-xl p-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome back, Alex!</h2>
+                    <p class="text-gray-600 mb-4">Continue your journey toward your dream career. You've made great progress!</p>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="progress-container w-64">
+                            <div class="progress-bar" style="width: 65%;"></div>
+                        </div>
+                        <span class="text-sm font-medium text-blue-700">65% profile complete</span>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Complete Your Profile
+                    </button>
+                </div>
+                <div class="mt-6 md:mt-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-48 w-48 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard quick stats -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Applications</h3>
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">5 Active</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-3xl font-bold text-gray-800">8</p>
+                        <p class="text-sm text-gray-600">Total Applications</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Saved Internships</h3>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">3 New</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-3xl font-bold text-gray-800">12</p>
+                        <p class="text-sm text-gray-600">Saved for Later</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Upcoming Events</h3>
+                    <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Tomorrow</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-3xl font-bold text-gray-800">2</p>
+                        <p class="text-sm text-gray-600">Career Workshops</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recommended internships section -->
+        <section class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Recommended Internships</h2>
+                <a href="#view-all" class="text-blue-600 hover:text-blue-800 font-medium">View All</a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Internship Card 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <div class="bg-blue-100 p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-semibold text-gray-800">UX Design Intern</h3>
+                                    <p class="text-gray-600">TechCorp Inc.</p>
+                                </div>
+                            </div>
+                            <button aria-label="Save internship" class="text-gray-400 hover:text-blue-600 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Remote</span>
+                            <span class="bg-green-50 text-green-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Paid</span>
+                            <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2.5 py-0.5 rounded-full">3 months</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">Join our design team to create intuitive user experiences for our flagship products. Perfect for students with UI/UX knowledge.</p>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Posted 2 days ago</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-lg text-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Internship Card 2 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <div class="bg-green-100 p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-semibold text-gray-800">Finance Analyst Intern</h3>
+                                    <p class="text-gray-600">Global Finance Group</p>
+                                </div>
+                            </div>
+                            <button aria-label="Save internship" class="text-gray-400 hover:text-blue-600 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-yellow-50 text-yellow-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Hybrid</span>
+                            <span class="bg-green-50 text-green-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Paid</span>
+                            <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2.5 py-0.5 rounded-full">6 months</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">Gain hands-on experience in financial analysis, reporting, and forecasting. Ideal for finance or accounting students.</p>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Posted 1 week ago</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-lg text-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Internship Card 3 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center">
+                                <div class="bg-purple-100 p-2 rounded-lg">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-lg font-semibold text-gray-800">Software Developer Intern</h3>
+                                    <p class="text-gray-600">InnoTech Solutions</p>
+                                </div>
+                            </div>
+                            <button aria-label="Save internship" class="text-gray-400 hover:text-blue-600 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Remote</span>
+                            <span class="bg-green-50 text-green-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Paid</span>
+                            <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2.5 py-0.5 rounded-full">4 months</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">Work on real-world projects using modern technologies. Looking for students with knowledge of JavaScript and React.</p>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">Posted 3 days ago</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-lg text-sm transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Apply Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Career assessment section -->
+        <section class="mb-8">
+            <div class="bg-indigo-50 rounded-xl p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Discover Your Career Path</h2>
+                        <p class="text-gray-600 mb-4">Take our personalized career assessment to find internships that match your skills and interests.</p>
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 pulse-animation">
+                            Start Assessment
+                        </button>
+                    </div>
+                    <div class="mt-6 md:mt-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-48 w-48 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mentorship section -->
+        <section class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Connect with Mentors</h2>
+                <a href="#view-all-mentors" class="text-blue-600 hover:text-blue-800 font-medium">View All</a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Mentor Card 1 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300 mentor-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-800">Sarah Chen</h3>
+                                <p class="text-gray-600">UX Design Lead at TechCorp</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">UX Design</span>
+                            <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Product Strategy</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">10+ years of experience in UX design. Passionate about helping students break into the tech industry.</p>
+                        
+                        <button class="w-full bg-white border border-blue-600 hover:bg-blue-50 text-blue-600 font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Request Mentorship
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mentor Card 2 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300 mentor-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-800">Michael Rodriguez</h3>
+                                <p class="text-gray-600">Senior Financial Analyst at GFG</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-green-50 text-green-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Finance</span>
+                            <span class="bg-yellow-50 text-yellow-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Data Analysis</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">Financial expert with experience in investment banking and corporate finance. Helps students prepare for finance careers.</p>
+                        
+                        <button class="w-full bg-white border border-blue-600 hover:bg-blue-50 text-blue-600 font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Request Mentorship
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mentor Card 3 -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300 mentor-card">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-800">Priya Patel</h3>
+                                <p class="text-gray-600">Software Engineer at InnoTech</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-purple-50 text-purple-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Web Development</span>
+                            <span class="bg-red-50 text-red-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Mobile Apps</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">Full-stack developer specializing in React and Node.js. Mentors students on building portfolios and technical interviews.</p>
+                        
+                        <button class="w-full bg-white border border-blue-600 hover:bg-blue-50 text-blue-600 font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Request Mentorship
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources section -->
+        <section class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Career Resources</h2>
+                <div class="flex space-x-2">
+                    <button id="tab-articles" class="tab-button px-4 py-2 text-blue-600 border-b-2 border-blue-600 font-medium">Articles</button>
+                    <button id="tab-videos" class="tab-button px-4 py-2 text-gray-600 hover:text-blue-600 font-medium">Videos</button>
+                    <button id="tab-templates" class="tab-button px-4 py-2 text-gray-600 hover:text-blue-600 font-medium">Templates</button>
+                </div>
+            </div>
+            
+            <!-- Articles Tab Content -->
+            <div id="content-articles" class="tab-content active">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Article Card 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">How to Ace Your Technical Interview</h3>
+                            <p class="text-gray-600 text-sm mb-4">Learn the strategies and preparation techniques to succeed in technical interviews at top companies.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">5 min read</span>
+                                <a href="#read-article" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Read Article</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Article Card 2 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Building a Professional Portfolio</h3>
+                            <p class="text-gray-600 text-sm mb-4">Tips for creating a standout portfolio that showcases your skills and projects to potential employers.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">8 min read</span>
+                                <a href="#read-article" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Read Article</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Article Card 3 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Networking for Career Success</h3>
+                            <p class="text-gray-600 text-sm mb-4">Strategies for building professional relationships that can help advance your career and open new opportunities.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">6 min read</span>
+                                <a href="#read-article" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Read Article</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Videos Tab Content -->
+            <div id="content-videos" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Video Card 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="relative">
+                            <div class="bg-gray-200 h-48 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Resume Writing Workshop</h3>
+                            <p class="text-gray-600 text-sm mb-4">Step-by-step guide to crafting a resume that stands out to recruiters and hiring managers.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">15 min</span>
+                                <a href="#watch-video" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Watch Video</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Card 2 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="relative">
+                            <div class="bg-gray-200 h-48 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Mock Interview Practice</h3>
+                            <p class="text-gray-600 text-sm mb-4">Watch real mock interviews with feedback to prepare for your own interviews.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">25 min</span>
+                                <a href="#watch-video" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Watch Video</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Card 3 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="relative">
+                            <div class="bg-gray-200 h-48 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">Day in the Life: Software Engineer</h3>
+                            <p class="text-gray-600 text-sm mb-4">Follow a software engineer through their typical workday to understand the role better.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-500">18 min</span>
+                                <a href="#watch-video" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Watch Video</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Templates Tab Content -->
+            <div id="content-templates" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Template Card 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <h3 class="ml-2 text-lg font-semibold text-gray-800">Modern Resume Template</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">Clean and professional resume template designed to highlight your skills and experience.</p>
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Download Template
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Template Card 2 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <h3 class="ml-2 text-lg font-semibold text-gray-800">Cover Letter Template</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">Customizable cover letter template to help you make a strong first impression with employers.</p>
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Download Template
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Template Card 3 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition duration-300">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <h3 class="ml-2 text-lg font-semibold text-gray-800">Portfolio Website Template</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">HTML/CSS template for creating a professional portfolio website to showcase your projects.</p>
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Download Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community forum section -->
+        <section class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Community Discussions</h2>
+                <a href="#view-all-discussions" class="text-blue-600 hover:text-blue-800 font-medium">View All</a>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <!-- Discussion 1 -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-start">
+                            <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-800">Tips for remote internship interviews?</h3>
+                                <p class="text-gray-600 text-sm">Started by Jamie Lee • 2 days ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">12 replies</span>
+                            <span class="bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded-full">Hot Topic</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">I have a remote interview for a software engineering internship next week. Any advice on how to prepare and make a good impression virtually?</p>
+                    <div class="flex space-x-4">
+                        <button class="flex items-center text-gray-600 hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                            </svg>
+                            <span>Like (8)</span>
+                        </button>
+                        <button class="flex items-center text-gray-600 hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Discussion 2 -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-start">
+                            <div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-800">Portfolio projects for marketing internships</h3>
+                                <p class="text-gray-600 text-sm">Started by Taylor Wong • 5 days ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">7 replies</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">What kind of projects should I include in my portfolio when applying for marketing internships? Looking for ideas that would impress potential employers.</p>
+                    <div class="flex space-x-4">
+                        <button class="flex items-center text-gray-600 hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                            </svg>
+                            <span>Like (5)</span>
+                        </button>
+                        <button class="flex items-center text-gray-600 hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Discussion 3 -->
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-start">
+                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-800">Balancing internship with coursework</h3>
+                                <p class="text-gray-600 text-sm">Started by Alex Johnson • 1 week ago</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">15 replies</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">How do you all manage to balance a part-time internship with a full course load? Looking for time management tips and advice from those who've done it successfully.</p>
+                    <div class="flex space-x-4">
+                        <button class="flex items-center text-gray-600 hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                            </svg>
+                            <span>Like (12)</span>
+                        </button>
+                        <button class="flex items-center text-gray-600 hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            <span>Reply</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-gray-50 border-t border-gray-200">
+                    <button class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Start a New Discussion
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- User achievements section -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Achievements</h2>
+            
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Career Development Progress</h3>
+                        <p class="text-gray-600">Keep building your skills and completing activities to earn badges!</p>
+                    </div>
+                    <div class="mt-4 md:mt-0">
+                        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">Level 2: Explorer</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <!-- Achievement Badge 1 -->
+                    <div class="tooltip achievement-badge bg-green-50 rounded-lg p-4 flex flex-col items-center">
+                        <div class="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-medium text-gray-800 text-center">Profile Completer</h4>
+                        <span class="tooltiptext">Completed your profile with all required information</span>
+                    </div>
+                    
+                    <!-- Achievement Badge 2 -->
+                    <div class="tooltip achievement-badge bg-blue-50 rounded-lg p-4 flex flex-col items-center">
+                        <div class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-medium text-gray-800 text-center">First Application</h4>
+                        <span class="tooltiptext">Successfully submitted your first internship application</span>
+                    </div>
+                    
+                    <!-- Achievement Badge 3 (Locked) -->
+                    <div class="tooltip achievement-badge bg-gray-50 rounded-lg p-4 flex flex-col items-center opacity-60">
+                        <div class="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-medium text-gray-800 text-center">Interview Ace</h4>
+                        <span class="tooltiptext">Complete 3 mock interviews to unlock this badge</span>
+                    </div>
+                    
+                    <!-- Achievement Badge 4 (Locked) -->
+                    <div class="tooltip achievement-badge bg-gray-50 rounded-lg p-4 flex flex-col items-center opacity-60">
+                        <div class="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-medium text-gray-800 text-center">Networking Pro</h4>
+                        <span class="tooltiptext">Connect with 5 mentors to unlock this badge</span>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        View All Achievements
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Motivational quote section -->
+        <section class="mb-8">
+            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-8 text-center text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                </svg>
+                <h2 class="text-2xl font-bold mb-2">"The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle."</h2>
+                <p class="text-lg opacity-90">- Steve Jobs</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">CareerConnect</h3>
+                    <p class="text-gray-300 text-sm">Helping students and young professionals navigate their career paths and find meaningful internship opportunities.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-300 hover:text-white text-sm">About Us</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white text-sm">Contact</a></li>
+                        <li><a href="#faq" class="text-gray-300 hover:text-white text-sm">FAQ</a></li>
+                        <li><a href="#privacy" class="text-gray-300 hover:text-white text-sm">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#blog" class="text-gray-300 hover:text-white text-sm">Career Blog</a></li>
+                        <li><a href="#webinars" class="text-gray-300 hover:text-white text-sm">Webinars</a></li>
+                        <li><a href="#guides" class="text-gray-300 hover:text-white text-sm">Career Guides</a></li>
+                        <li><a href="#tools" class="text-gray-300 hover:text-white text-sm">Resume Tools</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" aria-label="
